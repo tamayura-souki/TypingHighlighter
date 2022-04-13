@@ -1,0 +1,20 @@
+{
+    "sound_effects": {
+        "normal_key_type": {
+            "path": "resource/key.mp3",
+            "volume": 1.0
+        },
+        "enter_key_type": {
+            "path": "resource/key.mp3",
+            "volume": 1.0
+        },
+        "mouse_click": {
+            "path": "resource/click.mp3",
+            "volume": 1.0
+        },
+        "mouse_wheel": {
+            "path": "resource/scroll.mp3",
+            "volume": 1.0
+        }
+    }
+}
