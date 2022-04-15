@@ -3,3 +3,5 @@ build
 *.spec
 *.pyc
 resource
+archives
+log.txt

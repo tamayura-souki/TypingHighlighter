@@ -3,7 +3,7 @@ from PySide2.QtGui import QDesktopServices
 from PySide2.QtCore import QUrl
 
 HOME_URL = "https://github.com/tamayura-souki/TypingHighlighter"
-VERSION = 1.0
+VERSION = "0.1.1"
 
 class TrayWidget(QSystemTrayIcon):
     def __init__(self, parent=None):

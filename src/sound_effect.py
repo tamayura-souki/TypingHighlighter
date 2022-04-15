@@ -1,15 +1,26 @@
+from logging import Logger
+
 from pynput import keyboard, mouse
 import pygame
 from pygame.mixer import Sound
 
+from exceptions import BadConfigError
+
 class SoundEffect:
-    def __init__(self, config: dict):
+    def __init__(self, config: dict, logger: Logger):
+        self.logger = logger
+
         pygame.mixer.init()
 
-        self.key_type_sound: Sound = self._load_sound(config["normal_key_type"])
-        self.enter_type_sound: Sound = self._load_sound(config["enter_key_type"])
-        self.mouse_click_sound: Sound = self._load_sound(config["mouse_click"])
-        self.mouse_wheel_sound: Sound = self._load_sound(config["mouse_wheel"])
+        try:
+            self.key_type_sound: Sound = self._load_sound(config["normal_key_type"])
+            self.enter_type_sound: Sound = self._load_sound(config["enter_key_type"])
+            self.mouse_click_sound: Sound = self._load_sound(config["mouse_click"])
+            self.mouse_wheel_sound: Sound = self._load_sound(config["mouse_wheel"])
+        except KeyError as e:
+            e = BadConfigError(e.args[0])
+            self.logger.error(e)
+            raise e
 
         self.key_released = {}
 
@@ -23,8 +34,13 @@ class SoundEffect:
         mouse_listener.start()
 
     def _load_sound(self, config_data: dict) -> Sound:
-        sound = Sound(config_data["path"])
-        sound.set_volume(config_data["volume"])
+        try:
+            sound = Sound(config_data["path"])
+            sound.set_volume(config_data["volume"])
+        except FileNotFoundError:
+            e = FileNotFoundError(f"ファイル {config_data['path']} が見つかりません。 リソースフォルダの中身を確認するか、config.json に正しいパスを書いてください。")
+            self.logger.error(e)
+            raise e
         return sound
 
     def key_on_press(self, key: keyboard.KeyCode | keyboard.Key):
